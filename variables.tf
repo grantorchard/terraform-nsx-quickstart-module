@@ -51,3 +51,14 @@ variable private_subnets_snat_enabled {
   type        = bool
   default     = true
 }
+
+variable nsx_data {
+	type = map(map(string))
+	default = {
+		"production" = {
+			"transport_zone_name" = "TZ-OVERLAY"
+			"edge_cluster_name" = "edge-cluster"
+			"tier0_name" = "Provider-LR"
+		}
+	}
+}
