@@ -56,7 +56,6 @@ resource nsxt_policy_tier1_gateway "this" {
   default_rule_logging      = "false"
   enable_firewall           = "false"
   enable_standby_relocation = "false"
-  force_whitelisting        = "true"
   tier0_path                = data.nsxt_policy_tier0_gateway.this.path
   pool_allocation           = "ROUTING"
 
