@@ -13,7 +13,7 @@ variable description {
 variable environment {
   description = "The environment type that you are creating"
   type        = string
-  default     = "development"
+  default     = "production"
 }
 
 variable public_subnet_suffix {
@@ -52,10 +52,7 @@ variable private_subnets_snat_enabled {
   default     = true
 }
 
-variable "nsx_server" {
-  type = string
-  description = "The FQDN of NSX Manager"  
-}
+
 variable nsx_data {
 	type = map(map(string))
 	default = {

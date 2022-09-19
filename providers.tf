@@ -9,7 +9,4 @@ terraform {
       version = "~>3"
     }
   }
-  provider "nsxt" {
-	host = var.nsx_server
-}
 }
