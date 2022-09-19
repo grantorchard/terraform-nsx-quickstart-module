@@ -52,6 +52,10 @@ variable private_subnets_snat_enabled {
   default     = true
 }
 
+variable "nsx_server" {
+  type = string
+  description = "The FQDN of NSX Manager"  
+}
 variable nsx_data {
 	type = map(map(string))
 	default = {
