@@ -20,6 +20,11 @@ variable "dhcp_server_lease" {
   type = string
   default = "86400"
 }
+variable "dhcp_dns_server" {
+  description = "DHCP Default DNS server"
+  type = list(string)
+  default = ["1.1.1.1","8.8.8.8"]
+}
 variable "create_dhcp_server" {
   type        = bool
   description = "(Optional) Conditional that creates a DHCP server within the NSX-T environment on the Tier1 Router"
