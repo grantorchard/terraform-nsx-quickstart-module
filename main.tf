@@ -5,13 +5,6 @@ locals {
 resource random_pet "this" {
   length = 2
 }
-
-# module nsx_data {
-#   source      = "app.terraform.io/grantorchard/remote-state/nsx"
-#   version     = "0.0.1"
-#   environment = lower(var.environment)
-# }
-
 resource "nsxt_policy_dhcp_server" "dhcp_server" {
   #dhcp_enable = var.create_dhcp_server ? length(var.public_networks) : 0
   count             = length(var.public_subnets)
@@ -38,8 +31,10 @@ resource nsxt_policy_segment "public" {
       "/",
       split("/", element(var.public_subnets, count.index))[1]
     )
-  dhcp_ranges = ["${cidrhost(var.public_subnets[count.index], 3)}-${cidrhost(var.public_subnets[count.index], -2)}"]
-
+  dhcp_ranges = ["${cidrhost(var.public_subnets[count.index], 2)}-${cidrhost(var.public_subnets[count.index], -3)}"]
+   dhcp_v4_config {
+      server_address = "${element(nsxt_policy_dhcp_server.dhcp_server[count.index].server_addresses, count.index)}"
+  }
   }
   advanced_config {
     connectivity = "ON"
