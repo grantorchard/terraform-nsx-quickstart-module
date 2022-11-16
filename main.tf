@@ -12,12 +12,27 @@ resource random_pet "this" {
 #   environment = lower(var.environment)
 # }
 
+resource "nsxt_policy_dhcp_server" "dhcp_server" {
+  dhcp_enable = var.create_dhcp_server ? 1 : 0
+  count             = length(var.public_subnets)
+  display_name      = "${local.prefix}-${var.public_subnet_suffix}-${count.index}-dhcp-server"
+  description       = "${local.prefix}-${var.public_subnet_suffix}-${count.index} DHCP Server managed via terraform"
+  lease_time        = var.dhcp_server_lease
+  edge_cluster_path = data.nsxt_policy_edge_cluster.this.path
+  server_addresses =  cidrhost(var.public_subnets[count.index], -2)
+}
+
+
 resource nsxt_policy_segment "public" {
   count               = length(var.public_subnets)
   display_name        = "${local.prefix}-${var.public_subnet_suffix}-${count.index}"
   description         = var.description
   connectivity_path   = nsxt_policy_tier1_gateway.this.path
   transport_zone_path = data.nsxt_policy_transport_zone.this.path
+  #Creates DHCP service for each count if var.create_dhcp_server is true otherwise null.
+  dhcp_config_path    = var.create_dhcp_server ? nsxt_policy_dhcp_server.dhcp_server[count.index].path : null
+  dhcp_ranges = ["${cidrsubnet(var.public_subnets[count.index], 3)}-${cidrhost(var.public_subnets[count.index], -2)}"]
+  
   subnet {
     cidr = format("%s%s%s",
       cidrhost(element(var.public_subnets, count.index), 1),

@@ -3,7 +3,6 @@ variable prefix {
   type        = string
   default     = ""
 }
-
 variable description {
   description = "A description to place on all objects that support it"
   type        = string
@@ -15,6 +14,18 @@ variable environment {
   type        = string
   default     = "production"
 }
+
+variable "dhcp_server_lease" {
+  description = "DHCP Default Server Lease"
+  type = string
+  default = "86400"
+}
+variable "create_dhcp_server" {
+  type        = bool
+  description = "(Optional) Conditional that creates a DHCP server within the NSX-T environment on the Tier1 Router"
+  default     = false
+}
+
 
 variable public_subnet_suffix {
   description = "Suffix to append to public subnet names"
@@ -31,7 +42,7 @@ variable private_subnet_suffix {
 variable public_subnets {
   description = "A list of public subnets to use"
   type        = list(string)
-  default     = []
+  default     = ["10.0.0.0/28","10.0.0.16/28","10.0.0.32/28"]
 }
 
 variable private_subnets {
